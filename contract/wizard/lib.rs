@@ -1,5 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std, no_main)]
 
+pub use self::wizard::WizardRef;
+
 #[openbrush::implementation(PSP34, Ownable, PSP34Mintable, PSP34Metadata)]
 #[openbrush::contract]
 pub mod wizard {
@@ -29,7 +31,7 @@ pub mod wizard {
 
     #[overrider(PSP34Mintable)]
     #[openbrush::modifiers(only_owner)]
-    fn mint(&mut self, account: AccountId, id: Id) -> Result<(), PSP34Error> {
+    pub fn mint(&mut self, account: AccountId, id: Id) -> Result<(), PSP34Error> {
         psp34::InternalImpl::_mint_to(self, account, id)
     }
 
