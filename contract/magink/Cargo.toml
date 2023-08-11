@@ -14,6 +14,9 @@ openbrush = { tag = "4.0.0-beta", git = "https://github.com/Brushfam/openbrush-c
 
 wizard = { path = "../wizard", default-features = false, features = ["ink-as-dependency"] }
 
+[dev-dependencies]
+ink_e2e = "4.2.1"
+
 [lib]
 path = "lib.rs"
 
