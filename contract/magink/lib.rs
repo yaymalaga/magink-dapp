@@ -179,6 +179,13 @@ pub mod magink {
         pub fn get_next_id(&self) -> u8 {
             self.next_id
         }
+
+        /// For frontend access
+        #[ink(message)]
+        pub fn get_is_already_minted(&self) -> bool {
+            self.get_profile()
+                .map_or(false, |profile| profile.nft_claimed)
+        }
     }
 
     #[cfg(test)]
@@ -288,7 +295,7 @@ pub mod magink {
             let start_call =
                 build_message::<MaginkRef>(magink_account.clone()).call(|p| p.start(0));
             client
-                .call(&ink_e2e::bob(), start_call, 1, None)
+                .call(&ink_e2e::bob(), start_call, 0, None)
                 .await
                 .expect("calling `start` failed");
 
@@ -308,7 +315,7 @@ pub mod magink {
                 let mint_call = build_message::<MaginkRef>(magink_account.clone())
                     .call(|p| p.mint_wizard());
                 let mint_result = client
-                    .call_run(&ink_e2e::bob(), mint_call, 1000, None)
+                    .call(&ink_e2e::bob(), mint_call, 0, None)
                     .await
                     .expect("calling `mint_wizard` failed")
                     .return_value();
