@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/yaymalaga/magink-dapp/static/css/main.cd08fbe8.css",
-    "main.js": "/yaymalaga/magink-dapp/static/js/main.253fa455.js",
-    "static/media/book.png": "/yaymalaga/magink-dapp/static/media/book.57065a022d1a9c1c14db.png",
-    "static/media/pot.png": "/yaymalaga/magink-dapp/static/media/pot.6daa6e3736bd3dfac20b.png",
-    "static/media/wizard.png": "/yaymalaga/magink-dapp/static/media/wizard.76a02fb8fc15096fa0e4.png",
-    "static/media/crystals.png": "/yaymalaga/magink-dapp/static/media/crystals.3dc8f2a47608db3d263d.png",
-    "static/media/candle.png": "/yaymalaga/magink-dapp/static/media/candle.1fd343f0ebf478481c15.png",
-    "static/media/crystalball.png": "/yaymalaga/magink-dapp/static/media/crystalball.353bd63259a4cfdb6298.png",
-    "static/media/frog.png": "/yaymalaga/magink-dapp/static/media/frog.aa5ad1c59ff7e773db5b.png",
-    "static/media/logo.png": "/yaymalaga/magink-dapp/static/media/logo.eb6a9f67775302c99931.png",
-    "static/media/crow.png": "/yaymalaga/magink-dapp/static/media/crow.0c3764bb6f4f18e422fd.png",
-    "static/media/hat.png": "/yaymalaga/magink-dapp/static/media/hat.973ec3e70c8946c31d0e.png",
-    "static/media/potionblue.png": "/yaymalaga/magink-dapp/static/media/potionblue.3f4a075f1057bfd2f967.png",
-    "index.html": "/yaymalaga/magink-dapp/index.html",
-    "main.cd08fbe8.css.map": "/yaymalaga/magink-dapp/static/css/main.cd08fbe8.css.map",
-    "main.253fa455.js.map": "/yaymalaga/magink-dapp/static/js/main.253fa455.js.map"
+    "main.css": "/static/css/main.cd08fbe8.css",
+    "main.js": "/static/js/main.cd032e1d.js",
+    "static/media/book.png": "/static/media/book.57065a022d1a9c1c14db.png",
+    "static/media/pot.png": "/static/media/pot.6daa6e3736bd3dfac20b.png",
+    "static/media/wizard.png": "/static/media/wizard.76a02fb8fc15096fa0e4.png",
+    "static/media/crystals.png": "/static/media/crystals.3dc8f2a47608db3d263d.png",
+    "static/media/candle.png": "/static/media/candle.1fd343f0ebf478481c15.png",
+    "static/media/crystalball.png": "/static/media/crystalball.353bd63259a4cfdb6298.png",
+    "static/media/frog.png": "/static/media/frog.aa5ad1c59ff7e773db5b.png",
+    "static/media/logo.png": "/static/media/logo.eb6a9f67775302c99931.png",
+    "static/media/crow.png": "/static/media/crow.0c3764bb6f4f18e422fd.png",
+    "static/media/hat.png": "/static/media/hat.973ec3e70c8946c31d0e.png",
+    "static/media/potionblue.png": "/static/media/potionblue.3f4a075f1057bfd2f967.png",
+    "index.html": "/index.html",
+    "main.cd08fbe8.css.map": "/static/css/main.cd08fbe8.css.map",
+    "main.cd032e1d.js.map": "/static/js/main.cd032e1d.js.map"
   },
   "entrypoints": [
     "static/css/main.cd08fbe8.css",
-    "static/js/main.253fa455.js"
+    "static/js/main.cd032e1d.js"
   ]
 }
