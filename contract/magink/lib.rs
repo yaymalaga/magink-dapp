@@ -92,7 +92,6 @@ pub mod magink {
             if user.nft_claimed {
                 return Err(Error::NftAlreadyClaimed);
             }
-            ink::env::debug_println!("Test");
 
             if user.badges_claimed == 9 {
                 let mint_result = build_call::<DefaultEnvironment>()
@@ -182,8 +181,8 @@ pub mod magink {
 
         /// For frontend access
         #[ink(message)]
-        pub fn get_is_already_minted(&self) -> bool {
-            self.get_profile()
+        pub fn get_is_already_minted(&self, account: AccountId) -> bool {
+            self.get_account_profile(account)
                 .map_or(false, |profile| profile.nft_claimed)
         }
     }
