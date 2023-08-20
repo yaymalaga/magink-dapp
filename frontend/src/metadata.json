@@ -1,12 +1,12 @@
 {
   "source": {
-    "hash": "0x50a7aa8bff0ca5b131b9b7b27eaad15e1a4be884a0f94ace28db8c741b5a8bcb",
-    "language": "ink! 4.2.0",
+    "hash": "0xe29d5bbbbf5d85419a11da7acd63e991935fae1006559406f7624dbd7e11ca4d",
+    "language": "ink! 4.2.1",
     "compiler": "rustc 1.69.0",
     "build_info": {
       "build_mode": "Release",
       "cargo_contract_version": "3.0.1",
-      "rust_toolchain": "stable-aarch64-apple-darwin",
+      "rust_toolchain": "stable-x86_64-unknown-linux-gnu",
       "wasm_opt_settings": {
         "keep_debug_symbols": false,
         "optimization_passes": "Z"
@@ -23,7 +23,17 @@
   "spec": {
     "constructors": [
       {
-        "args": [],
+        "args": [
+          {
+            "label": "wizard_account",
+            "type": {
+              "displayName": [
+                "AccountId"
+              ],
+              "type": 3
+            }
+          }
+        ],
         "default": false,
         "docs": [
           "Creates a new Magink smart contract."
@@ -35,7 +45,7 @@
             "ink_primitives",
             "ConstructorResult"
           ],
-          "type": 2
+          "type": 5
         },
         "selector": "0x9bae9d5e"
       }
@@ -46,13 +56,13 @@
         "displayName": [
           "AccountId"
         ],
-        "type": 9
+        "type": 3
       },
       "balance": {
         "displayName": [
           "Balance"
         ],
-        "type": 14
+        "type": 16
       },
       "blockNumber": {
         "displayName": [
@@ -64,20 +74,20 @@
         "displayName": [
           "ChainExtension"
         ],
-        "type": 17
+        "type": 19
       },
       "hash": {
         "displayName": [
           "Hash"
         ],
-        "type": 15
+        "type": 17
       },
       "maxEventTopics": 4,
       "timestamp": {
         "displayName": [
           "Timestamp"
         ],
-        "type": 16
+        "type": 18
       }
     },
     "events": [],
@@ -86,7 +96,7 @@
         "ink",
         "LangError"
       ],
-      "type": 4
+      "type": 7
     },
     "messages": [
       {
@@ -113,7 +123,7 @@
             "ink",
             "MessageResult"
           ],
-          "type": 2
+          "type": 5
         },
         "selector": "0x3c1e3986"
       },
@@ -131,9 +141,25 @@
             "ink",
             "MessageResult"
           ],
-          "type": 5
+          "type": 8
         },
         "selector": "0xb388803f"
+      },
+      {
+        "args": [],
+        "default": false,
+        "docs": [],
+        "label": "mint_wizard",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 8
+        },
+        "selector": "0x4265458d"
       },
       {
         "args": [],
@@ -149,7 +175,7 @@
             "ink",
             "MessageResult"
           ],
-          "type": 8
+          "type": 11
         },
         "selector": "0x84539e3b"
       },
@@ -161,7 +187,7 @@
               "displayName": [
                 "AccountId"
               ],
-              "type": 9
+              "type": 3
             }
           }
         ],
@@ -177,7 +203,7 @@
             "ink",
             "MessageResult"
           ],
-          "type": 8
+          "type": 11
         },
         "selector": "0xc220c975"
       },
@@ -189,7 +215,7 @@
               "displayName": [
                 "AccountId"
               ],
-              "type": 9
+              "type": 3
             }
           }
         ],
@@ -205,7 +231,7 @@
             "ink",
             "MessageResult"
           ],
-          "type": 11
+          "type": 12
         },
         "selector": "0x49480163"
       },
@@ -223,7 +249,7 @@
             "ink",
             "MessageResult"
           ],
-          "type": 11
+          "type": 12
         },
         "selector": "0x166e7927"
       },
@@ -241,7 +267,7 @@
             "ink",
             "MessageResult"
           ],
-          "type": 8
+          "type": 11
         },
         "selector": "0xd3907224"
       },
@@ -253,7 +279,7 @@
               "displayName": [
                 "AccountId"
               ],
-              "type": 9
+              "type": 3
             }
           }
         ],
@@ -269,9 +295,55 @@
             "ink",
             "MessageResult"
           ],
-          "type": 8
+          "type": 11
         },
         "selector": "0x89caa824"
+      },
+      {
+        "args": [],
+        "default": false,
+        "docs": [
+          " For testing"
+        ],
+        "label": "get_next_id",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 11
+        },
+        "selector": "0xd5bbc5ec"
+      },
+      {
+        "args": [
+          {
+            "label": "account",
+            "type": {
+              "displayName": [
+                "AccountId"
+              ],
+              "type": 3
+            }
+          }
+        ],
+        "default": false,
+        "docs": [
+          " For frontend access"
+        ],
+        "label": "get_is_already_minted",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 15
+        },
+        "selector": "0x5d2b1112"
       }
     ]
   },
@@ -312,6 +384,15 @@
                             }
                           },
                           "name": "badges_claimed"
+                        },
+                        {
+                          "layout": {
+                            "leaf": {
+                              "key": "0xf0c1edb0",
+                              "ty": 2
+                            }
+                          },
+                          "name": "nft_claimed"
                         }
                       ],
                       "name": "Profile"
@@ -321,6 +402,24 @@
                 }
               },
               "name": "user"
+            },
+            {
+              "layout": {
+                "leaf": {
+                  "key": "0x00000000",
+                  "ty": 3
+                }
+              },
+              "name": "wizard_account"
+            },
+            {
+              "layout": {
+                "leaf": {
+                  "key": "0x00000000",
+                  "ty": 0
+                }
+              },
+              "name": "next_id"
             }
           ],
           "name": "Magink"
@@ -350,69 +449,39 @@
       "id": 2,
       "type": {
         "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 3
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 4
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 3
-          },
-          {
-            "name": "E",
-            "type": 4
-          }
-        ],
-        "path": [
-          "Result"
-        ]
+          "primitive": "bool"
+        }
       }
     },
     {
       "id": 3,
       "type": {
         "def": {
-          "tuple": []
-        }
-      }
-    },
-    {
-      "id": 4,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
+          "composite": {
+            "fields": [
               {
-                "index": 1,
-                "name": "CouldNotReadInput"
+                "type": 4,
+                "typeName": "[u8; 32]"
               }
             ]
           }
         },
         "path": [
           "ink_primitives",
-          "LangError"
+          "types",
+          "AccountId"
         ]
+      }
+    },
+    {
+      "id": 4,
+      "type": {
+        "def": {
+          "array": {
+            "len": 32,
+            "type": 0
+          }
+        }
       }
     },
     {
@@ -433,7 +502,7 @@
               {
                 "fields": [
                   {
-                    "type": 4
+                    "type": 7
                   }
                 ],
                 "index": 1,
@@ -449,7 +518,7 @@
           },
           {
             "name": "E",
-            "type": 4
+            "type": 7
           }
         ],
         "path": [
@@ -461,12 +530,39 @@
       "id": 6,
       "type": {
         "def": {
+          "tuple": []
+        }
+      }
+    },
+    {
+      "id": 7,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "index": 1,
+                "name": "CouldNotReadInput"
+              }
+            ]
+          }
+        },
+        "path": [
+          "ink_primitives",
+          "LangError"
+        ]
+      }
+    },
+    {
+      "id": 8,
+      "type": {
+        "def": {
           "variant": {
             "variants": [
               {
                 "fields": [
                   {
-                    "type": 3
+                    "type": 9
                   }
                 ],
                 "index": 0,
@@ -487,7 +583,7 @@
         "params": [
           {
             "name": "T",
-            "type": 3
+            "type": 9
           },
           {
             "name": "E",
@@ -500,7 +596,49 @@
       }
     },
     {
-      "id": 7,
+      "id": 9,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 6
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 10
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 6
+          },
+          {
+            "name": "E",
+            "type": 10
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 10,
       "type": {
         "def": {
           "variant": {
@@ -512,6 +650,18 @@
               {
                 "index": 1,
                 "name": "UserNotFound"
+              },
+              {
+                "index": 2,
+                "name": "NotEnoughBadges"
+              },
+              {
+                "index": 3,
+                "name": "NftAlreadyClaimed"
+              },
+              {
+                "index": 4,
+                "name": "MintError"
               }
             ]
           }
@@ -524,7 +674,7 @@
       }
     },
     {
-      "id": 8,
+      "id": 11,
       "type": {
         "def": {
           "variant": {
@@ -541,7 +691,7 @@
               {
                 "fields": [
                   {
-                    "type": 4
+                    "type": 7
                   }
                 ],
                 "index": 1,
@@ -557,80 +707,7 @@
           },
           {
             "name": "E",
-            "type": 4
-          }
-        ],
-        "path": [
-          "Result"
-        ]
-      }
-    },
-    {
-      "id": 9,
-      "type": {
-        "def": {
-          "composite": {
-            "fields": [
-              {
-                "type": 10,
-                "typeName": "[u8; 32]"
-              }
-            ]
-          }
-        },
-        "path": [
-          "ink_primitives",
-          "types",
-          "AccountId"
-        ]
-      }
-    },
-    {
-      "id": 10,
-      "type": {
-        "def": {
-          "array": {
-            "len": 32,
-            "type": 0
-          }
-        }
-      }
-    },
-    {
-      "id": 11,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 12
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 4
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 12
-          },
-          {
-            "name": "E",
-            "type": 4
+            "type": 7
           }
         ],
         "path": [
@@ -645,13 +722,55 @@
           "variant": {
             "variants": [
               {
+                "fields": [
+                  {
+                    "type": 13
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 7
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 13
+          },
+          {
+            "name": "E",
+            "type": 7
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 13,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
                 "index": 0,
                 "name": "None"
               },
               {
                 "fields": [
                   {
-                    "type": 13
+                    "type": 14
                   }
                 ],
                 "index": 1,
@@ -663,7 +782,7 @@
         "params": [
           {
             "name": "T",
-            "type": 13
+            "type": 14
           }
         ],
         "path": [
@@ -672,7 +791,7 @@
       }
     },
     {
-      "id": 13,
+      "id": 14,
       "type": {
         "def": {
           "composite": {
@@ -691,6 +810,11 @@
                 "name": "badges_claimed",
                 "type": 0,
                 "typeName": "u8"
+              },
+              {
+                "name": "nft_claimed",
+                "type": 2,
+                "typeName": "bool"
               }
             ]
           }
@@ -703,7 +827,49 @@
       }
     },
     {
-      "id": 14,
+      "id": 15,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 2
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 7
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 2
+          },
+          {
+            "name": "E",
+            "type": 7
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 16,
       "type": {
         "def": {
           "primitive": "u128"
@@ -711,13 +877,13 @@
       }
     },
     {
-      "id": 15,
+      "id": 17,
       "type": {
         "def": {
           "composite": {
             "fields": [
               {
-                "type": 10,
+                "type": 4,
                 "typeName": "[u8; 32]"
               }
             ]
@@ -731,7 +897,7 @@
       }
     },
     {
-      "id": 16,
+      "id": 18,
       "type": {
         "def": {
           "primitive": "u64"
@@ -739,7 +905,7 @@
       }
     },
     {
-      "id": 17,
+      "id": 19,
       "type": {
         "def": {
           "variant": {}

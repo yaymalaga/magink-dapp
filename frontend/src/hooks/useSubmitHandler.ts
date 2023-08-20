@@ -4,18 +4,25 @@ import { FormikHelpers } from "formik";
 import { useMaginkContract } from "./useMaginkContract";
 
 export const useSubmitHandler = () => {
-  const { claim } = useMaginkContract();
+  const { claim, mint } = useMaginkContract();
   
   return async (
     values: Values,
-    { setSubmitting }: FormikHelpers<Values>
+    { setSubmitting }: FormikHelpers<Values>,
+    badges: number
   ) => {
-    console.log("send claim Tx")
+    let action = badges < 9 ? claim : mint;
+    
+    if (badges < 9) {
+      console.log("send claim Tx");
+    } else {
+      console.log("send mint Tx");
+    }
 
-    const claimArgs = undefined;
+    const args = undefined;
     const options = undefined;
 
-    claim?.signAndSend(claimArgs, options, (result, _api, error) => {
+    action?.signAndSend(args, options, (result, _api, error) => {
       if (error) {
         console.error(JSON.stringify(error));
         setSubmitting(false);

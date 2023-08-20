@@ -14,9 +14,10 @@ interface Props {
   badges: number;
   remainingBlocks: number;
   runtimeError?: any;
+  isMinted: boolean;
 }
 
-export const MaginkForm = ({ awake, isAwake, remainingBlocks, runtimeError, badges }: Props) => {
+export const MaginkForm = ({ awake, isAwake, remainingBlocks, runtimeError, badges, isMinted }: Props) => {
   const { isSubmitting, isValid } = useFormikContext<Values>();
   const { claimDryRun, magink } = useMaginkContract();
   const { account } = useWallet();
@@ -49,9 +50,9 @@ export const MaginkForm = ({ awake, isAwake, remainingBlocks, runtimeError, badg
             <br />
             <Button
               type="submit"
-              disabled={isSubmitting || !isValid || (remainingBlocks != 0 && !isFirtsClaim) || badges >= 9}
+              disabled={isSubmitting || !isValid || (remainingBlocks != 0 && !isFirtsClaim) || badges > 9 || isMinted}
             >
-              Claim badge
+              {badges < 9 ? 'Claim' : 'Mint'} badge
             </Button>
           </>
         )}
@@ -61,7 +62,7 @@ export const MaginkForm = ({ awake, isAwake, remainingBlocks, runtimeError, badg
           </Button>
         )}
       </div>
-      {remainingBlocks != 0 && isAwake && badges <= 9 && !isFirtsClaim && (
+      {remainingBlocks != 0 && isAwake && badges <= 9 && !isFirtsClaim && !isMinted && (
         <div className="text-xs text-left mb-2 text-gray-200">
           Claim a new badge after {remainingBlocks} blocks
         </div>

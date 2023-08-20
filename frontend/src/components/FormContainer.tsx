@@ -11,13 +11,14 @@ import { decodeError } from 'useink/core';
 import { useBlockHeader, useWallet } from 'useink';
 
 export const FormContainer = () => {
-  const { magink, start, getRemaining, getRemainingFor, getBadgesFor } = useMaginkContract();
+  const { magink, start, getRemaining, getRemainingFor, getBadgesFor, getIsMinted } = useMaginkContract();
   const submitFn = useSubmitHandler();
   const { account } = useWallet();
   const { showConnectWallet, setShowConnectWallet } = useUI();
-  const { claim } = useMaginkContract();
+  const { claim, mint } = useMaginkContract();
   const [isAwake, setIsAwake] = useState(false);
   const [isStarting, setIsStarting] = useState(false);
+  const [isMinted, setIsMinted] = useState(false);
   const [remainingBlocks, setRemainingBlocks] = useState<number>(0);
   const [badges, setBadges] = useState<number>(0);
   const block = useBlockHeader();
@@ -41,6 +42,12 @@ export const FormContainer = () => {
     console.log('##### badges count', badges?.ok && badges.value.decoded);
     if (badges?.ok && badges.value.decoded) {
       setBadges(badges.value.decoded);
+    }
+
+    const minted = await getIsMinted?.send([account?.address], { defaultCaller: true });
+    console.log('##### isMinted', minted?.ok && minted.value.decoded);
+    if (minted?.ok && minted.value.decoded) {
+      setIsMinted(minted.value.decoded);
     }
 
     runtimeError = pickError(getRemaining?.result);
@@ -93,12 +100,12 @@ export const FormContainer = () => {
         initialValues={initialValues}
         onSubmit={(values, helpers) => {
           if (!helpers) return;
-          submitFn(values, helpers);
+          submitFn(values, helpers, badges);
         }}
       >
         {({ status: { finalized, events, errorMessage } = {}, isSubmitting }) => {
-          return isSubmitting && claim && !hasAny(claim, 'PendingSignature', 'None') ? (
-            <Loader message="Claiming your badge..." />
+          return isSubmitting && (claim && !hasAny(claim, 'PendingSignature', 'None') || (mint && !hasAny(mint, 'PendingSignature', 'None'))) ? (
+            <Loader message={(badges < 9 ? 'Claiming' : 'Minting') + " your badge..."} />
           ) : (
             <>
               {isStarting && (<Loader message="Initializing app for new user..." />)}
@@ -119,6 +126,7 @@ export const FormContainer = () => {
                           badges={badges}
                           remainingBlocks={remainingBlocks}
                           runtimeError={runtimeError}
+                          isMinted={isMinted}
                         />
                       )}
                     </div>

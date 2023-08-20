@@ -10,10 +10,12 @@ interface MaginkContractState {
   claimDryRun?: DryRun<number>;
   start?: Tx<number>;
   claim?: Tx<number>;
+  mint?: Tx<number>;
   getRemaining?: Call<number>;
   getRemainingFor?: Call<number>;
   getBadges?: Call<number>;
   getBadgesFor?: Call<number>;
+  getIsMinted?: Call<boolean>;
 }
 
 export const MaginkContractContext = createContext<MaginkContractState>({});
@@ -24,15 +26,18 @@ export function MaginkContractProvider({ children }: PropsWithChildren) {
   const startDryRun = useDryRun<number>(magink, 'start');
   const claim = useTx(magink, 'claim');
   const start = useTx(magink, 'start');
+  const mint = useTx(magink, 'mintWizard');
   const getRemaining = useCall<number>(magink, 'getRemaining');
   const getBadges = useCall<number>(magink, 'getBadges');
   const getBadgesFor = useCall<number>(magink, 'getBadgesFor');
   const getRemainingFor = useCall<number>(magink, 'getRemainingFor');
+  const getIsMinted = useCall<boolean>(magink, 'getIsAlreadyMinted');
   useTxNotifications(claim);
   useTxNotifications(start);
+  useTxNotifications(mint);
 
   return (
-    <MaginkContractContext.Provider value={{ magink, startDryRun, claimDryRun, start, claim, getRemaining, getRemainingFor, getBadges, getBadgesFor }}>
+    <MaginkContractContext.Provider value={{ magink, startDryRun, claimDryRun, start, claim, mint, getRemaining, getRemainingFor, getBadges, getBadgesFor, getIsMinted }}>
       {children}
     </MaginkContractContext.Provider>
   );
