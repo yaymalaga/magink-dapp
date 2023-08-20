@@ -46,8 +46,9 @@ pub mod wizard {
             let mut _instance = Self::default();
             ownable::Internal::_init_with_owner(&mut _instance, Self::env().caller());
             let collection_id = psp34::PSP34Impl::collection_id(&_instance);
-			metadata::Internal::_set_attribute(&mut _instance, collection_id.clone(), String::from("name"), String::from("Wizard"));
-			metadata::Internal::_set_attribute(&mut _instance, collection_id, String::from("symbol"), String::from("WZD"));
+			metadata::Internal::_set_attribute(&mut _instance, collection_id.clone(), String::from("name"), String::from("YAY"));
+			metadata::Internal::_set_attribute(&mut _instance, collection_id.clone(), String::from("description"), String::from("AstarAcademy NFT exercise"));
+            metadata::Internal::_set_attribute(&mut _instance, collection_id, String::from("image"), String::from("https://bafkreihgob3knpzzmhiw66grmkuq3qa2ukvdseksbaxkxuiehwkhuniyfy.ipfs.nftstorage.link"));
             _instance
         }
     }
