@@ -1,7 +1,7 @@
 {
   "name": "magink",
   "version": "0.1.0",
-  "homepage": "https://yaymalaga.github.io",
+  "homepage": "https://yaymalaga.github.io/magink-dapp",
   "private": true,
   "dependencies": {
     "@headlessui/react": "^1.7.14",
