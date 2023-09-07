@@ -16,6 +16,7 @@ interface MaginkContractState {
   getBadges?: Call<number>;
   getBadgesFor?: Call<number>;
   getIsMinted?: Call<boolean>;
+  getTokenImage?: Call<string>;
 }
 
 export const MaginkContractContext = createContext<MaginkContractState>({});
@@ -32,12 +33,13 @@ export function MaginkContractProvider({ children }: PropsWithChildren) {
   const getBadgesFor = useCall<number>(magink, 'getBadgesFor');
   const getRemainingFor = useCall<number>(magink, 'getRemainingFor');
   const getIsMinted = useCall<boolean>(magink, 'getIsAlreadyMinted');
+  const getTokenImage = useCall<string>(magink, 'getTokenImage');
   useTxNotifications(claim);
   useTxNotifications(start);
   useTxNotifications(mint);
 
   return (
-    <MaginkContractContext.Provider value={{ magink, startDryRun, claimDryRun, start, claim, mint, getRemaining, getRemainingFor, getBadges, getBadgesFor, getIsMinted }}>
+    <MaginkContractContext.Provider value={{ magink, startDryRun, claimDryRun, start, claim, mint, getRemaining, getRemainingFor, getBadges, getBadgesFor, getIsMinted, getTokenImage }}>
       {children}
     </MaginkContractContext.Provider>
   );

@@ -12,12 +12,13 @@ import book from "../assets/book.png";
 
 type Props = {
     level: number;
+    tokenImage: string;
 };
 
-export const Gallery = ({ level }: Props) => {
+export const Gallery = ({ level, tokenImage }: Props) => {
     const [gallery, setGallery] = useState<number>(0);
 
-    const fullGallery: Array<string> = [candle, book, frog, pot, crow, crystalball, crystals, potionblue, hat];
+    const fullGallery: Array<string> = [candle, book, frog, pot, crow, crystalball, crystals, potionblue, hat, tokenImage];
     const achievedGallery: Array<string> = fullGallery.slice(0, level);
 
     const GalleryItems = () => {
@@ -27,7 +28,7 @@ export const Gallery = ({ level }: Props) => {
 
     useEffect(() => {
         setGallery(level);
-    }, [level]);
+    }, [level, tokenImage]);
 
     return (
         <div>

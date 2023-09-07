@@ -15,9 +15,10 @@ interface Props {
   remainingBlocks: number;
   runtimeError?: any;
   isMinted: boolean;
+  tokenImage: string;
 }
 
-export const MaginkForm = ({ awake, isAwake, remainingBlocks, runtimeError, badges, isMinted }: Props) => {
+export const MaginkForm = ({ awake, isAwake, remainingBlocks, runtimeError, badges, isMinted, tokenImage }: Props) => {
   const { isSubmitting, isValid } = useFormikContext<Values>();
   const { claimDryRun, magink } = useMaginkContract();
   const { account } = useWallet();
@@ -62,13 +63,13 @@ export const MaginkForm = ({ awake, isAwake, remainingBlocks, runtimeError, badg
           </Button>
         )}
       </div>
-      {remainingBlocks != 0 && isAwake && badges < 9 && !isFirtsClaim && (
+      {remainingBlocks != 0 && isAwake && badges <= 9 && !isFirtsClaim && (
         <div className="text-xs text-left mb-2 text-gray-200">
-          Claim a new badge after {remainingBlocks} blocks
+          {badges < 9 ? 'Claim' : 'Mint'} a new badge after {remainingBlocks} blocks
         </div>
       )}
       {account && isAwake && (
-        <Gallery level={badges} />
+        <Gallery level={isMinted ? 10 : badges} tokenImage={tokenImage}/>
       )}
       {runtimeError && magink && (
         <div className="text-xs text-left mb-2 text-red-500">

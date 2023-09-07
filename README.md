@@ -19,7 +19,7 @@ This is an example dApp using `ink!` smart contract and `useink` React library. 
 1. This is the template dApp with the task for developers on how to extend it.
 2. Collect magink! badges by learning some facts about ink! smart contract language and Astar Network. 
 
-To better understand this dApp/task please play the [Swanky Magink! School](https://swanky-dapps.github.io/magink-dapp/) and collect all badges.
+To better understand this dApp/task please play the [Swanky Magink! School](https://yaymalaga.github.io/magink-dapp/) and collect all badges.
 
 <br clear="both"/>
 
@@ -79,9 +79,14 @@ For the development you can use `chains: [Development]` in [index.tsx](https://g
 
 The Magink! contract is deployed on Shibuya testnet at the following address:
 ```
-apJNVQJ5T4C5gZ1XRPw2MAHcUFxbuHch7BPGQuTyT8DHjeX
+YyL2GRA2Tz7DKRZ4WHzuD9p9QxG6494y3dzH3ZtAzDAH8ZK
 ```
 Its metadata can be [found here](./frontend/src/metadata.json). 
+
+The Wizard contract is deployed on Shibuya testnet at the following address:
+```
+ZJ8oMJX1odejde3Ye8PzzWYESBDKF4GvYxpEruX7qU1PYWu
+```
 
 ## The frontend
 The frontend is build with [useink](https://github.com/paritytech/useink) library and uses template from [link!](https://use.ink/examples/dapps) example.

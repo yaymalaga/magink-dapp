@@ -3,7 +3,7 @@ import { Values } from "../types";
 export const initialValues: Values = { blocksToLive: 2 };
 
 export const CONTRACT_ADDRESS =
-  "arZLwmw58rcG1u3swBvywj2s6iwSfD64Ski45KJjD1CSx3K";
+  "YyL2GRA2Tz7DKRZ4WHzuD9p9QxG6494y3dzH3ZtAzDAH8ZK";
 
 export const astarFacts: string[] = [
   `Welcome to magink!, where the enchanting fusion of magic and <a href="https://use.ink/" target="_blank">ink!</a> awaits. Embark on an exciting journey into the world of smart contracts on the Astar Network. Earn badges for completing each lesson, showcasing your progress. And as the ultimate reward, claim your exclusive Wizard NFT upon conquering all ten lessons. Let the magic unfold in magink! as we explore the realms of possibility together.`,

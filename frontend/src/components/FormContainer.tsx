@@ -11,7 +11,7 @@ import { decodeError } from 'useink/core';
 import { useBlockHeader, useWallet } from 'useink';
 
 export const FormContainer = () => {
-  const { magink, start, getRemaining, getRemainingFor, getBadgesFor, getIsMinted } = useMaginkContract();
+  const { magink, start, getRemaining, getRemainingFor, getBadgesFor, getIsMinted, getTokenImage } = useMaginkContract();
   const submitFn = useSubmitHandler();
   const { account } = useWallet();
   const { showConnectWallet, setShowConnectWallet } = useUI();
@@ -19,6 +19,7 @@ export const FormContainer = () => {
   const [isAwake, setIsAwake] = useState(false);
   const [isStarting, setIsStarting] = useState(false);
   const [isMinted, setIsMinted] = useState(false);
+  const [tokenImage, setTokenImage] = useState("");
   const [remainingBlocks, setRemainingBlocks] = useState<number>(0);
   const [badges, setBadges] = useState<number>(0);
   const block = useBlockHeader();
@@ -48,6 +49,12 @@ export const FormContainer = () => {
     console.log('##### isMinted', minted?.ok && minted.value.decoded);
     if (minted?.ok && minted.value.decoded) {
       setIsMinted(minted.value.decoded);
+    }
+
+    const token = await getTokenImage?.send([], { defaultCaller: true });
+    console.log('##### getTokenImage', token?.ok && token.value.decoded);
+    if (token?.ok && token.value.decoded) {
+      setTokenImage(token.value.decoded);
     }
 
     runtimeError = pickError(getRemaining?.result);
@@ -127,6 +134,7 @@ export const FormContainer = () => {
                           remainingBlocks={remainingBlocks}
                           runtimeError={runtimeError}
                           isMinted={isMinted}
+                          tokenImage={tokenImage}
                         />
                       )}
                     </div>

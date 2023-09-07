@@ -10,6 +10,7 @@ pub mod magink {
             call::{build_call, ExecutionInput, Selector},
             DefaultEnvironment,
         },
+        prelude::string::String,
         storage::Mapping,
     };
     use openbrush::contracts::psp34::Id;
@@ -28,7 +29,6 @@ pub mod magink {
     pub struct Magink {
         user: Mapping<AccountId, Profile>,
         wizard_account: AccountId,
-        next_id: u8,
     }
     #[derive(
         Debug, PartialEq, Eq, PartialOrd, Ord, Clone, scale::Encode, scale::Decode,
@@ -44,8 +44,6 @@ pub mod magink {
         start_block: u32,
         // number of badges claimed
         badges_claimed: u8,
-        // wether the nft has been already obtained
-        nft_claimed: bool,
     }
 
     impl Magink {
@@ -55,7 +53,6 @@ pub mod magink {
             Self {
                 user: Mapping::new(),
                 wizard_account,
-                next_id: 0,
             }
         }
 
@@ -66,7 +63,6 @@ pub mod magink {
                 claim_era: era,
                 start_block: self.env().block_number(),
                 badges_claimed: 0,
-                nft_claimed: false,
             };
             self.user.insert(self.env().caller(), &profile);
         }
@@ -87,38 +83,37 @@ pub mod magink {
 
         #[ink(message)]
         pub fn mint_wizard(&mut self) -> Result<(), Error> {
-            let mut user = self.get_profile().ok_or(Error::UserNotFound)?;
+            let user = self.get_profile().ok_or(Error::UserNotFound)?;
 
-            if user.nft_claimed {
+            if user.badges_claimed < 9 {
+                return Err(Error::NotEnoughBadges);
+            }
+
+            if self.get_is_already_minted(self.env().caller()) {
                 return Err(Error::NftAlreadyClaimed);
             }
 
-            if user.badges_claimed == 9 {
-                let mint_result = build_call::<DefaultEnvironment>()
-                    .call(self.wizard_account)
-                    .gas_limit(5000000000)
-                    .exec_input(
-                        ExecutionInput::new(Selector::new(ink::selector_bytes!(
-                            "PSP34Mintable::mint"
-                        )))
-                        .push_arg(self.env().caller())
-                        .push_arg(Id::U8(self.next_id)),
-                    )
-                    .returns::<()>()
-                    .try_invoke()
-                    .expect("Mint call error");
+            let next_id = self.get_next_id();
 
-                if mint_result.is_ok() {
-                    user.nft_claimed = true;
-                    self.user.insert(self.env().caller(), &user);
-                    self.next_id += 1;
-                    return Ok(());
-                } else {
-                    return Err(Error::MintError);
-                }
+            let mint_result = build_call::<DefaultEnvironment>()
+                .call(self.wizard_account)
+                .gas_limit(5000000000)
+                .exec_input(
+                    ExecutionInput::new(Selector::new(ink::selector_bytes!(
+                        "PSP34Mintable::mint"
+                    )))
+                    .push_arg(self.env().caller())
+                    .push_arg(Id::U128(next_id)),
+                )
+                .returns::<()>()
+                .try_invoke()
+                .expect("Mint call error");
+
+            if mint_result.is_err() {
+                return Err(Error::MintError);
             }
 
-            return Err(Error::NotEnoughBadges);
+            Ok(())
         }
 
         /// Returns the remaining blocks in the era.
@@ -173,17 +168,64 @@ pub mod magink {
                 .map_or(0, |profile| profile.badges_claimed)
         }
 
-        /// For testing
+        /// Use token total supply for the next id
         #[ink(message)]
-        pub fn get_next_id(&self) -> u8 {
-            self.next_id
+        pub fn get_next_id(&self) -> u128 {
+            build_call::<DefaultEnvironment>()
+                .call(self.wizard_account)
+                .gas_limit(5000000000)
+                .exec_input(
+                    ExecutionInput::new(Selector::new(ink::selector_bytes!(
+                        "PSP34::total_supply"
+                    )))
+                    .push_arg(self.env().caller()),
+                )
+                .returns::<u128>()
+                .try_invoke()
+                .expect("total_supply call error")
+                .expect("total_supply error")
         }
 
         /// For frontend access
         #[ink(message)]
         pub fn get_is_already_minted(&self, account: AccountId) -> bool {
-            self.get_account_profile(account)
-                .map_or(false, |profile| profile.nft_claimed)
+            let balance_result = build_call::<DefaultEnvironment>()
+                .call(self.wizard_account)
+                .gas_limit(5000000000)
+                .exec_input(
+                    ExecutionInput::new(Selector::new(ink::selector_bytes!(
+                        "PSP34::balance_of"
+                    )))
+                    .push_arg(account),
+                )
+                .returns::<u32>()
+                .try_invoke()
+                .expect("balance_of call error");
+
+            balance_result.expect("balance_of error") >= 1
+        }
+
+        /// For frontend access
+        #[ink(message)]
+        pub fn get_token_image(&self) -> String {
+            let collection_id =
+                Id::Bytes(<_ as AsRef<[u8; 32]>>::as_ref(&self.wizard_account).to_vec());
+
+            build_call::<DefaultEnvironment>()
+                .call(self.wizard_account)
+                .gas_limit(5000000000)
+                .exec_input(
+                    ExecutionInput::new(Selector::new(ink::selector_bytes!(
+                        "PSP34Metadata::get_attribute"
+                    )))
+                    .push_arg(collection_id)
+                    .push_arg(String::from("image")),
+                )
+                .returns::<Option<String>>()
+                .try_invoke()
+                .expect("get_attribute call error")
+                .expect("get_attribute error")
+                .expect("no metadata")
         }
     }
 
@@ -255,7 +297,7 @@ pub mod magink {
 
         type E2EResult<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
-        #[ink_e2e::test]
+        #[ink_e2e::test(additional_contracts = "magink/Cargo.toml wizard/Cargo.toml")]
         async fn e2e_minting_works(mut client: ink_e2e::Client<C, E>) -> E2EResult<()> {
             // Upload and instantiate Wizard contract
             let wizard_constructor = WizardRef::new();
@@ -285,10 +327,12 @@ pub mod magink {
             let owner =
                 build_message::<WizardRef>(wizard_account.clone()).call(|p| p.owner());
             let owner_result = client
-                .call_dry_run(&ink_e2e::alice(), &owner, 0, None)
+                .call(&ink_e2e::alice(), owner, 0, None)
                 .await
-                .return_value();
-            assert_eq!(owner_result.expect("No owner"), magink_account);
+                .expect("calling 'owner'")
+                .return_value()
+                .expect("No owner found");
+            assert_eq!(owner_result, magink_account);
 
             // Start the game for Bob
             let start_call =
@@ -314,10 +358,10 @@ pub mod magink {
                 let mint_call = build_message::<MaginkRef>(magink_account.clone())
                     .call(|p| p.mint_wizard());
                 let mint_result = client
-                    .call(&ink_e2e::bob(), mint_call, 0, None)
+                    .call_dry_run(&ink_e2e::bob(), &mint_call, 0, None)
                     .await
-                    .expect("calling `mint_wizard` failed")
                     .return_value();
+
                 assert_eq!(Err(Error::NotEnoughBadges), mint_result);
 
                 // Claim badge
@@ -354,12 +398,12 @@ pub mod magink {
 
             // NFT is now ready to be minted
             let mint_call = build_message::<MaginkRef>(magink_account.clone())
-                    .call(|p| p.mint_wizard());
-                let mint_result = client
-                    .call(&ink_e2e::bob(), mint_call, 1000, None)
-                    .await
-                    .expect("calling `mint_wizard` failed")
-                    .return_value();
+                .call(|p| p.mint_wizard());
+            let mint_result = client
+                .call(&ink_e2e::bob(), mint_call, 0, None)
+                .await
+                .expect("calling `mint_wizard` failed")
+                .return_value();
             assert_eq!(Ok(()), mint_result);
 
             // Thus, next id should be now 1
@@ -374,12 +418,11 @@ pub mod magink {
 
             // Check the user can't collect again the NFT
             let mint_call = build_message::<MaginkRef>(magink_account.clone())
-                    .call(|p| p.mint_wizard());
-                let mint_result = client
-                    .call(&ink_e2e::bob(), mint_call, 1000, None)
-                    .await
-                    .expect("calling `mint_wizard` failed")
-                    .return_value();
+                .call(|p| p.mint_wizard());
+            let mint_result = client
+                .call_dry_run(&ink_e2e::bob(), &mint_call, 0, None)
+                .await
+                .return_value();
             assert_eq!(Err(Error::NftAlreadyClaimed), mint_result);
 
             // As the previous call didn't mint anything, the id should remain one
@@ -391,6 +434,16 @@ pub mod magink {
                 .expect("calling `get_next_id` failed")
                 .return_value();
             assert_eq!(1, next_id_result);
+
+            // Check token image
+            let token_image_call = build_message::<MaginkRef>(magink_account.clone())
+                .call(|p| p.get_token_image());
+            let token_image = client
+                .call(&ink_e2e::bob(), token_image_call, 0, None)
+                .await
+                .expect("calling `get_token_image` failed")
+                .return_value();
+            assert_eq!(String::from("https://bafkreihgob3knpzzmhiw66grmkuq3qa2ukvdseksbaxkxuiehwkhuniyfy.ipfs.nftstorage.link"), token_image);
 
             Ok(())
         }
