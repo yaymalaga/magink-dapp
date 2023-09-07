@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/magink-dapp/static/css/main.cd08fbe8.css",
-    "main.js": "/magink-dapp/static/js/main.c8e5eeea.js",
+    "main.js": "/magink-dapp/static/js/main.77077089.js",
     "static/media/book.png": "/magink-dapp/static/media/book.57065a022d1a9c1c14db.png",
     "static/media/pot.png": "/magink-dapp/static/media/pot.6daa6e3736bd3dfac20b.png",
     "static/media/wizard.png": "/magink-dapp/static/media/wizard.76a02fb8fc15096fa0e4.png",
@@ -15,10 +15,10 @@
     "static/media/potionblue.png": "/magink-dapp/static/media/potionblue.3f4a075f1057bfd2f967.png",
     "index.html": "/magink-dapp/index.html",
     "main.cd08fbe8.css.map": "/magink-dapp/static/css/main.cd08fbe8.css.map",
-    "main.c8e5eeea.js.map": "/magink-dapp/static/js/main.c8e5eeea.js.map"
+    "main.77077089.js.map": "/magink-dapp/static/js/main.77077089.js.map"
   },
   "entrypoints": [
     "static/css/main.cd08fbe8.css",
-    "static/js/main.c8e5eeea.js"
+    "static/js/main.77077089.js"
   ]
 }
